@@ -72,3 +72,22 @@ def test_run_parallel_analysis() -> None:
     assert body["legal"]["findings"]
     assert body["policy"]["findings"]
     assert body["policy"]["controls"]
+
+
+def test_evaluate_enforcement() -> None:
+    benchmark_path = (
+        Path(__file__).parents[1] / "benchmarks" / "cases" / "week_1_cases.json"
+    )
+    payload = json.loads(benchmark_path.read_text(encoding="utf-8"))[14]["case"]
+
+    response = client.post(
+        "/v1/enforcement/evaluate",
+        json={"case": payload, "top_k": 8},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["enforcement"]["outcome"] == "deny"
+    assert body["enforcement"]["winning_rule_id"] == "RULE-DENY-002"
+    assert body["enforcement"]["ruleset_version"] == "1.0.0"
+    assert body["enforcement"]["rule_trace"]

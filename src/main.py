@@ -6,9 +6,11 @@ from src.models import (
     CaseIntake,
     EvidenceQuery,
     EvidenceResponse,
+    EnforcementRequest,
+    LaunchReviewResponse,
     ParallelAnalysisResponse,
 )
-from src.orchestration import AnalysisWorkflow
+from src.orchestration import AnalysisWorkflow, LaunchReviewWorkflow
 
 app = FastAPI(
     title="Multi-Agent Compliance Assistant",
@@ -17,6 +19,7 @@ app = FastAPI(
 )
 retriever = PolicyRetriever()
 analysis_workflow = AnalysisWorkflow(retriever=retriever)
+launch_review_workflow = LaunchReviewWorkflow(analysis_workflow=analysis_workflow)
 
 
 @app.get("/health")
@@ -59,3 +62,13 @@ def list_policies() -> dict[str, object]:
 def run_analysis(request: CaseAnalysisRequest) -> ParallelAnalysisResponse:
     """Run Legal and Policy analysis in parallel against one evidence snapshot."""
     return analysis_workflow.analyze(request.case, top_k=request.top_k)
+
+
+@app.post("/v1/enforcement/evaluate", response_model=LaunchReviewResponse)
+def evaluate_enforcement(request: EnforcementRequest) -> LaunchReviewResponse:
+    """Run or reuse analysis, then apply versioned deterministic launch rules."""
+    return launch_review_workflow.review(
+        request.case,
+        analysis=request.analysis,
+        top_k=request.top_k,
+    )

@@ -1,0 +1,87 @@
+{
+  "ruleset_id": "RULESET-LAUNCH-001",
+  "version": "1.0.0",
+  "effective_date": "2026-01-01",
+  "rules": [
+    {
+      "rule_id": "RULE-DENY-001",
+      "title": "Block unsafe child companion launch",
+      "priority": 1000,
+      "outcome": "deny",
+      "risk_level": "critical",
+      "predicate": "unsafe_child_companion",
+      "explanation": "An under-thirteen conversational experience without human oversight, notice, and completed safety evaluation is prohibited.",
+      "required_categories": ["child_safety", "content_safety", "privacy"]
+    },
+    {
+      "rule_id": "RULE-DENY-002",
+      "title": "Block autonomous employment termination",
+      "priority": 990,
+      "outcome": "deny",
+      "risk_level": "critical",
+      "predicate": "autonomous_employment_termination",
+      "explanation": "A fully autonomous employment termination decision without human review or appeal is prohibited.",
+      "required_categories": ["high_impact_decision", "governance", "transparency"]
+    },
+    {
+      "rule_id": "RULE-ESC-001",
+      "title": "Escalate high-impact automated decisions",
+      "priority": 800,
+      "outcome": "escalate",
+      "risk_level": "high",
+      "predicate": "high_impact_automated_decision",
+      "explanation": "Automated decisions affecting employment, credit, health, education, or account access require authorized human approval.",
+      "required_categories": ["high_impact_decision", "governance"]
+    },
+    {
+      "rule_id": "RULE-ESC-002",
+      "title": "Escalate biometric identity decisions",
+      "priority": 790,
+      "outcome": "escalate",
+      "risk_level": "high",
+      "predicate": "biometric_identity_decision",
+      "explanation": "Biometric identity verification affecting account access requires privacy and jurisdiction-specific approval.",
+      "required_categories": ["privacy", "high_impact_decision"]
+    },
+    {
+      "rule_id": "RULE-COND-001",
+      "title": "Require missing launch safeguards",
+      "priority": 500,
+      "outcome": "conditional_allow",
+      "risk_level": "medium",
+      "predicate": "material_launch_gap",
+      "explanation": "Missing notice, incomplete safety evaluation, unresolved questions, or other blocking controls must be remediated before launch.",
+      "required_categories": ["governance"]
+    },
+    {
+      "rule_id": "RULE-COND-002",
+      "title": "Require enhanced minor safeguards",
+      "priority": 490,
+      "outcome": "conditional_allow",
+      "risk_level": "medium",
+      "predicate": "minor_safeguard_review",
+      "explanation": "A teen or all-ages AI experience requires completed age-appropriate safeguards before launch.",
+      "required_categories": ["child_safety"]
+    },
+    {
+      "rule_id": "RULE-COND-003",
+      "title": "Require sensitive data approval",
+      "priority": 480,
+      "outcome": "conditional_allow",
+      "risk_level": "medium",
+      "predicate": "sensitive_data_review",
+      "explanation": "Sensitive or biometric data processing with unresolved approval questions requires remediation before launch.",
+      "required_categories": ["privacy"]
+    },
+    {
+      "rule_id": "RULE-ALLOW-001",
+      "title": "Allow adequately controlled low-risk launch",
+      "priority": 100,
+      "outcome": "allow",
+      "risk_level": "low",
+      "predicate": "baseline_allow",
+      "explanation": "No deny, escalation, or material-gap rule was triggered and the documented safeguards support launch.",
+      "required_categories": []
+    }
+  ]
+}

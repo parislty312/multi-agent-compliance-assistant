@@ -74,3 +74,22 @@ Legal and Policy agents run independently against the same evidence snapshot.
 They cannot query unversioned sources during analysis. Findings that cannot cite
 an exact retrieved section are rejected, while missing evidence is represented
 as an explicit abstention.
+
+## Enforcement Layer
+
+```mermaid
+flowchart LR
+    A["Case Facts"] --> C["Enforcement Agent"]
+    B["Legal and Policy Analysis"] --> C
+    D["Versioned Rule Set"] --> C
+    C --> E["Rule Trace"]
+    E --> F{"Winning Outcome"}
+    F --> G["Allow"]
+    F --> H["Conditional Allow"]
+    F --> I["Human Escalation"]
+    F --> J["Deny"]
+```
+
+The enforcement layer is deterministic and does not invoke a language model.
+It applies explicit rule priorities, requires supporting analysis categories,
+and records every evaluated predicate and input fact.

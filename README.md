@@ -59,8 +59,17 @@ Week 3 analysis foundations are implemented:
 - Policy-to-control mapping with ownership and verification methods
 - Agent analysis API and benchmark evaluation
 
+Week 4 enforcement foundations are implemented:
+
+- Versioned policy-as-code launch rules
+- Deterministic Enforcement Agent with explicit priority
+- Complete rule trace and winning-rule explanation
+- Human approval boundaries for escalation and denial
+- End-to-end launch review API
+- 100% expected-outcome accuracy on the 15-case benchmark
+
 See [Week 1 scope](docs/week-1-scope.md) and
-[Week 3 Legal and Policy agents](docs/week-3-legal-policy-agents.md).
+[Week 4 Enforcement Agent](docs/week-4-enforcement-agent.md).
 
 ## Safety
 
@@ -86,10 +95,12 @@ uvicorn src.main:app --reload
 Validate an intake payload with `POST /v1/cases/validate`.
 Retrieve versioned evidence with `POST /v1/evidence/retrieve`.
 Run parallel analysis with `POST /v1/analysis/run`.
+Evaluate a launch with `POST /v1/enforcement/evaluate`.
 
 Run the deterministic retrieval benchmark:
 
 ```bash
 python scripts/evaluate_retrieval.py
 python scripts/evaluate_agents.py
+python scripts/evaluate_enforcement.py
 ```
