@@ -1,0 +1,2 @@
+"""Legal obligation analysis agent."""
+
