@@ -1,0 +1,51 @@
+{
+  "policy_id": "POL-TRANS-001",
+  "title": "Synthetic AI Transparency and User Recourse Policy",
+  "version": "1.0.0",
+  "effective_date": "2026-01-01",
+  "status": "active",
+  "source_type": "synthetic_internal_policy",
+  "synthetic": true,
+  "owner": "Product Compliance",
+  "sections": [
+    {
+      "section_id": "TRANS-1.1",
+      "title": "AI interaction notice",
+      "text": "External users must receive clear notice when they interact with AI or receive materially AI-generated content. The notice must describe the feature purpose, important limitations, and how to reach human support.",
+      "categories": ["transparency"],
+      "jurisdictions": ["US", "global"],
+      "feature_types": ["chatbot", "content_generation", "content_moderation", "decision_support", "identity_verification", "personalization"],
+      "data_categories": ["public", "account", "user_content"],
+      "age_groups": ["adult", "teen_13_to_17", "under_13", "all_ages"],
+      "decision_domains": [],
+      "keywords": ["notice", "disclosure", "AI interaction", "limitations", "human support"],
+      "control_ids": ["CTL-TRANS-001"]
+    },
+    {
+      "section_id": "TRANS-1.2",
+      "title": "Consequential decision explanation and appeal",
+      "text": "A person affected by an AI-supported consequential decision must receive understandable reasons, information about the role of AI, access to human review, and a practical method to correct data or appeal the outcome.",
+      "categories": ["transparency", "high_impact_decision"],
+      "jurisdictions": ["US"],
+      "feature_types": ["decision_support", "identity_verification"],
+      "data_categories": ["employment", "education", "financial", "health", "biometric", "account"],
+      "age_groups": ["adult", "teen_13_to_17"],
+      "decision_domains": ["employment", "education", "credit", "healthcare", "account access"],
+      "keywords": ["explanation", "appeal", "human review", "correct data", "consequential decision"],
+      "control_ids": ["CTL-TRANS-002", "CTL-TRANS-003"]
+    },
+    {
+      "section_id": "TRANS-1.3",
+      "title": "Personalization and retention disclosure",
+      "text": "Personalized AI experiences must explain which account or activity data affects recommendations, how long that data is retained, and how a user can disable personalization or delete stored preference data.",
+      "categories": ["transparency", "privacy"],
+      "jurisdictions": ["US", "global"],
+      "feature_types": ["personalization", "chatbot"],
+      "data_categories": ["account", "user_content"],
+      "age_groups": ["adult", "teen_13_to_17"],
+      "decision_domains": [],
+      "keywords": ["personalization", "recommendations", "retention disclosure", "disable"],
+      "control_ids": ["CTL-TRANS-004", "CTL-PRIV-007"]
+    }
+  ]
+}

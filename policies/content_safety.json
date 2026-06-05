@@ -1,0 +1,51 @@
+{
+  "policy_id": "POL-SAFE-001",
+  "title": "Synthetic Generative AI Content Safety Policy",
+  "version": "1.0.0",
+  "effective_date": "2026-01-01",
+  "status": "active",
+  "source_type": "synthetic_internal_policy",
+  "synthetic": true,
+  "owner": "Trust and Safety",
+  "sections": [
+    {
+      "section_id": "SAFE-1.1",
+      "title": "Pre-launch safety evaluation",
+      "text": "Public generative AI features must complete documented evaluations for prohibited content, prompt bypasses, harmful advice, impersonation, and foreseeable misuse before broad launch. Unresolved high-severity failures block launch.",
+      "categories": ["content_safety", "governance"],
+      "jurisdictions": ["US", "global"],
+      "feature_types": ["chatbot", "content_generation", "content_moderation"],
+      "data_categories": ["public", "user_content"],
+      "age_groups": ["adult", "teen_13_to_17", "under_13", "all_ages"],
+      "decision_domains": [],
+      "keywords": ["safety evaluation", "prompt bypass", "harmful advice", "impersonation"],
+      "control_ids": ["CTL-SAFE-001", "CTL-SAFE-002"]
+    },
+    {
+      "section_id": "SAFE-1.2",
+      "title": "Reporting and incident response",
+      "text": "User-facing generative AI must provide an accessible harmful-output reporting mechanism, defined response ownership, severity-based response times, evidence preservation, and a process for updating filters and evaluations after incidents.",
+      "categories": ["content_safety", "governance"],
+      "jurisdictions": ["US", "global"],
+      "feature_types": ["chatbot", "content_generation", "content_moderation"],
+      "data_categories": ["user_content"],
+      "age_groups": ["adult", "teen_13_to_17", "under_13", "all_ages"],
+      "decision_domains": [],
+      "keywords": ["report harmful output", "incident response", "user reporting", "filters"],
+      "control_ids": ["CTL-SAFE-003", "CTL-SAFE-004"]
+    },
+    {
+      "section_id": "SAFE-1.3",
+      "title": "Human review for published content",
+      "text": "AI-generated external marketing or authoritative content must be reviewed by an accountable person before publication. Reviewers must verify factual claims and reject health, financial, or legal claims that lack approved evidence.",
+      "categories": ["content_safety", "governance"],
+      "jurisdictions": ["US", "global"],
+      "feature_types": ["content_generation"],
+      "data_categories": ["public"],
+      "age_groups": ["adult"],
+      "decision_domains": [],
+      "keywords": ["marketing", "publication", "factual claims", "editorial review"],
+      "control_ids": ["CTL-SAFE-006"]
+    }
+  ]
+}

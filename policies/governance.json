@@ -1,0 +1,51 @@
+{
+  "policy_id": "POL-GOV-001",
+  "title": "Synthetic AI Governance and Human Oversight Policy",
+  "version": "1.0.0",
+  "effective_date": "2026-01-01",
+  "status": "active",
+  "source_type": "synthetic_internal_policy",
+  "synthetic": true,
+  "owner": "AI Governance",
+  "sections": [
+    {
+      "section_id": "GOV-1.1",
+      "title": "Named owner and launch evidence",
+      "text": "Every AI feature must have a named business owner, documented intended and prohibited uses, completed risk evaluation, test evidence, known limitations, monitoring metrics, and an approved rollback plan before production launch.",
+      "categories": ["governance"],
+      "jurisdictions": ["US", "global"],
+      "feature_types": ["chatbot", "content_generation", "content_moderation", "decision_support", "identity_verification", "personalization"],
+      "data_categories": ["public", "account", "contact", "precise_location", "biometric", "health", "financial", "employment", "education", "user_content", "minor_data"],
+      "age_groups": ["adult", "teen_13_to_17", "under_13", "all_ages"],
+      "decision_domains": [],
+      "keywords": ["business owner", "risk evaluation", "monitoring", "rollback", "limitations"],
+      "control_ids": ["CTL-GOV-001", "CTL-GOV-002"]
+    },
+    {
+      "section_id": "GOV-1.2",
+      "title": "Meaningful human oversight",
+      "text": "Human oversight must be assigned to a trained role with authority, sufficient information, documented review triggers, and the ability to pause, reverse, or override an AI-supported action. A nominal reviewer without time or authority is not sufficient.",
+      "categories": ["governance", "high_impact_decision"],
+      "jurisdictions": ["US", "global"],
+      "feature_types": ["decision_support", "identity_verification", "content_moderation"],
+      "data_categories": ["employment", "education", "financial", "health", "biometric", "account"],
+      "age_groups": ["adult", "teen_13_to_17", "under_13", "all_ages"],
+      "decision_domains": ["employment", "education", "credit", "healthcare", "account access"],
+      "keywords": ["human oversight", "override", "review trigger", "authority"],
+      "control_ids": ["CTL-GOV-003"]
+    },
+    {
+      "section_id": "GOV-1.3",
+      "title": "Audit trail and policy versioning",
+      "text": "The system must record the case input, evidence sections, model and prompt versions, policy versions, agent findings, enforcement result, audit result, human approval, and overrides under a stable decision identifier.",
+      "categories": ["governance"],
+      "jurisdictions": ["US", "global"],
+      "feature_types": ["chatbot", "content_generation", "content_moderation", "decision_support", "identity_verification", "personalization"],
+      "data_categories": ["public", "account", "contact", "precise_location", "biometric", "health", "financial", "employment", "education", "user_content", "minor_data"],
+      "age_groups": ["adult", "teen_13_to_17", "under_13", "all_ages"],
+      "decision_domains": [],
+      "keywords": ["audit trail", "policy version", "agent findings", "override", "decision identifier"],
+      "control_ids": ["CTL-GOV-004"]
+    }
+  ]
+}

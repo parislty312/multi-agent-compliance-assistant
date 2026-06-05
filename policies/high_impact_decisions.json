@@ -1,0 +1,64 @@
+{
+  "policy_id": "POL-HIGH-001",
+  "title": "Synthetic High-Impact AI Decision Policy",
+  "version": "1.0.0",
+  "effective_date": "2026-01-01",
+  "status": "active",
+  "source_type": "synthetic_internal_policy",
+  "synthetic": true,
+  "owner": "Responsible AI",
+  "sections": [
+    {
+      "section_id": "HIGH-1.1",
+      "title": "Employment decisions",
+      "text": "AI used to rank, select, discipline, or terminate workers requires documented job relevance, bias evaluation, applicant or employee notice, meaningful human review, reason recording, and an appeal channel. Fully autonomous termination is prohibited.",
+      "categories": ["high_impact_decision", "transparency", "governance"],
+      "jurisdictions": ["US"],
+      "feature_types": ["decision_support"],
+      "data_categories": ["employment", "education", "contact", "account"],
+      "age_groups": ["adult"],
+      "decision_domains": ["employment", "employment termination"],
+      "keywords": ["resume", "applicant", "interview", "employee", "termination", "hiring"],
+      "control_ids": ["CTL-HIGH-001", "CTL-HIGH-002"]
+    },
+    {
+      "section_id": "HIGH-1.2",
+      "title": "Credit and financial eligibility",
+      "text": "AI influencing credit or financial eligibility requires validated reason codes, fair-lending testing, model risk approval, human review of adverse outcomes, required notices, and a process for users to dispute incorrect data or decisions.",
+      "categories": ["high_impact_decision", "transparency", "governance", "privacy"],
+      "jurisdictions": ["US"],
+      "feature_types": ["decision_support"],
+      "data_categories": ["financial", "account"],
+      "age_groups": ["adult"],
+      "decision_domains": ["credit", "financial eligibility"],
+      "keywords": ["credit", "lending", "eligibility", "reason codes", "adverse action"],
+      "control_ids": ["CTL-HIGH-003", "CTL-HIGH-004"]
+    },
+    {
+      "section_id": "HIGH-1.3",
+      "title": "Health and care access",
+      "text": "AI recommendations that influence diagnosis, triage, treatment, or access to care require clinical validation, licensed oversight, emergency fallback instructions, monitoring for missed high-risk cases, privacy review, and clear disclosure of model limitations.",
+      "categories": ["high_impact_decision", "content_safety", "privacy", "governance"],
+      "jurisdictions": ["US"],
+      "feature_types": ["chatbot", "decision_support"],
+      "data_categories": ["health", "user_content"],
+      "age_groups": ["adult", "teen_13_to_17", "under_13", "all_ages"],
+      "decision_domains": ["healthcare", "healthcare access", "triage"],
+      "keywords": ["symptom", "triage", "clinician", "emergency", "care"],
+      "control_ids": ["CTL-HIGH-005", "CTL-SAFE-005"]
+    },
+    {
+      "section_id": "HIGH-1.4",
+      "title": "Identity and account access",
+      "text": "AI identity verification that can deny account access requires alternative recovery, human review for failed or ambiguous matches, demographic performance evaluation, user notice, an appeal path, and jurisdiction-specific biometric approval.",
+      "categories": ["high_impact_decision", "privacy", "transparency", "governance"],
+      "jurisdictions": ["US"],
+      "feature_types": ["identity_verification", "decision_support"],
+      "data_categories": ["biometric", "account"],
+      "age_groups": ["adult", "teen_13_to_17"],
+      "decision_domains": ["account access", "identity verification"],
+      "keywords": ["face", "identity", "account recovery", "match score", "biometric"],
+      "control_ids": ["CTL-HIGH-007", "CTL-PRIV-006"]
+    }
+  ]
+}

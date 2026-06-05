@@ -43,8 +43,16 @@ Week 1 foundations are implemented:
 - API-level intake validation
 - Automated schema and benchmark acceptance tests
 
+Week 2 evidence foundations are implemented:
+
+- Six versioned synthetic policies with 19 citable sections
+- Strict policy, evidence chunk, query, and response schemas
+- Explainable metadata and lexical retrieval baseline
+- Evidence retrieval and policy inventory APIs
+- Complete expected-category recall across the 15-case benchmark at Top-8
+
 See [Week 1 scope](docs/week-1-scope.md) and
-[benchmark documentation](benchmarks/README.md).
+[Week 2 knowledge base](docs/week-2-knowledge-base.md).
 
 ## Safety
 
@@ -68,3 +76,10 @@ uvicorn src.main:app --reload
 ```
 
 Validate an intake payload with `POST /v1/cases/validate`.
+Retrieve versioned evidence with `POST /v1/evidence/retrieve`.
+
+Run the deterministic retrieval benchmark:
+
+```bash
+python scripts/evaluate_retrieval.py
+```

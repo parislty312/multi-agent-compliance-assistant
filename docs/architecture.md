@@ -39,3 +39,20 @@ flowchart LR
 - `ControlRequirement` translates findings into verifiable action.
 - `ComplianceDecision` is the final versioned workflow result.
 - Schema validation happens before and after every agent handoff.
+
+## Evidence Layer
+
+```mermaid
+flowchart LR
+    A["Versioned Policy JSON"] --> B["Schema Validation"]
+    B --> C["Section Evidence Chunks"]
+    D["Case Intake"] --> E["Metadata and Lexical Query"]
+    C --> F["Deterministic Retriever"]
+    E --> F
+    F --> G["Evidence Response"]
+    G --> H["Legal and Policy Agents"]
+```
+
+The Week 2 retriever is intentionally deterministic. It exposes scoring reasons
+and preserves exact policy section text, allowing future embedding retrieval to
+be evaluated against a transparent baseline.

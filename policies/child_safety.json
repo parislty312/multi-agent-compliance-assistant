@@ -1,0 +1,51 @@
+{
+  "policy_id": "POL-CHILD-001",
+  "title": "Synthetic Children and Teen AI Safety Policy",
+  "version": "1.0.0",
+  "effective_date": "2026-01-01",
+  "status": "active",
+  "source_type": "synthetic_internal_policy",
+  "synthetic": true,
+  "owner": "Youth Safety",
+  "sections": [
+    {
+      "section_id": "CHILD-1.1",
+      "title": "Children under thirteen",
+      "text": "An AI experience directed to children under thirteen must not launch without verified parental authorization, age-appropriate notice, strict data minimization, short retention, safety testing, and a staffed escalation path. Open-ended companionship is prohibited until these safeguards are independently approved.",
+      "categories": ["child_safety", "privacy", "content_safety"],
+      "jurisdictions": ["US"],
+      "feature_types": ["chatbot", "content_generation", "personalization"],
+      "data_categories": ["minor_data", "user_content", "account"],
+      "age_groups": ["under_13", "all_ages"],
+      "decision_domains": [],
+      "keywords": ["parental authorization", "children", "under thirteen", "companionship"],
+      "control_ids": ["CTL-CHILD-001", "CTL-CHILD-002", "CTL-CHILD-003"]
+    },
+    {
+      "section_id": "CHILD-1.2",
+      "title": "Teen safety controls",
+      "text": "Teen-facing generative AI must include age assurance, age-appropriate defaults, prohibited-content controls, crisis escalation, reporting, and parental or guardian controls where appropriate. Safety classifiers must be evaluated for teen-specific risks.",
+      "categories": ["child_safety", "content_safety", "governance"],
+      "jurisdictions": ["US"],
+      "feature_types": ["chatbot", "content_generation", "personalization"],
+      "data_categories": ["minor_data", "user_content"],
+      "age_groups": ["teen_13_to_17", "all_ages"],
+      "decision_domains": ["education"],
+      "keywords": ["teen", "age assurance", "parental controls", "crisis escalation"],
+      "control_ids": ["CTL-CHILD-004", "CTL-CHILD-005"]
+    },
+    {
+      "section_id": "CHILD-1.3",
+      "title": "Minor monitoring and consequential actions",
+      "text": "Biometric or behavioral monitoring of minors in education requires accessibility review, documented necessity, human review of every flag, an appeal process, and evidence that disability-related behavior does not create disproportionate false positives.",
+      "categories": ["child_safety", "high_impact_decision", "governance", "privacy"],
+      "jurisdictions": ["US"],
+      "feature_types": ["decision_support", "identity_verification"],
+      "data_categories": ["minor_data", "biometric", "education"],
+      "age_groups": ["teen_13_to_17", "under_13"],
+      "decision_domains": ["education", "education discipline"],
+      "keywords": ["student", "education", "monitoring", "accessibility", "disability"],
+      "control_ids": ["CTL-CHILD-006", "CTL-HIGH-006"]
+    }
+  ]
+}

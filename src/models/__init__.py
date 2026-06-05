@@ -19,6 +19,14 @@ from src.models.decision import (
     FindingCategory,
     FindingSeverity,
 )
+from src.models.evidence import (
+    EvidenceChunk,
+    EvidenceMatch,
+    EvidenceQuery,
+    EvidenceResponse,
+    PolicyDocument,
+    PolicySection,
+)
 
 __all__ = [
     "AIActRole",
@@ -32,8 +40,14 @@ __all__ = [
     "DataCategory",
     "DecisionOutcome",
     "DeploymentContext",
+    "EvidenceChunk",
+    "EvidenceMatch",
+    "EvidenceQuery",
+    "EvidenceResponse",
     "FeatureType",
     "FindingCategory",
     "FindingSeverity",
     "HumanOversight",
+    "PolicyDocument",
+    "PolicySection",
 ]

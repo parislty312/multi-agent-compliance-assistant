@@ -1,0 +1,51 @@
+{
+  "policy_id": "POL-PRIV-001",
+  "title": "Synthetic Privacy and Data Governance Policy",
+  "version": "1.0.0",
+  "effective_date": "2026-01-01",
+  "status": "active",
+  "source_type": "synthetic_internal_policy",
+  "synthetic": true,
+  "owner": "Privacy Governance",
+  "sections": [
+    {
+      "section_id": "PRIV-1.1",
+      "title": "Data minimization and purpose limitation",
+      "text": "AI features must collect and retain only data necessary for the documented intended use. A launch owner must define retention, deletion, access, and prohibited secondary-use controls before production processing begins.",
+      "categories": ["privacy", "governance"],
+      "jurisdictions": ["US", "global"],
+      "feature_types": ["chatbot", "content_generation", "decision_support", "identity_verification", "personalization"],
+      "data_categories": ["account", "contact", "precise_location", "health", "financial", "employment", "education", "user_content"],
+      "age_groups": ["adult", "teen_13_to_17", "under_13", "all_ages"],
+      "decision_domains": [],
+      "keywords": ["retention", "deletion", "purpose limitation", "data minimization"],
+      "control_ids": ["CTL-PRIV-001", "CTL-PRIV-002"]
+    },
+    {
+      "section_id": "PRIV-1.2",
+      "title": "Sensitive and biometric data",
+      "text": "Biometric, health, financial, precise location, and other sensitive data require explicit approval, documented consent or authority, restricted access, encryption, deletion procedures, and jurisdiction-specific review before launch.",
+      "categories": ["privacy", "governance"],
+      "jurisdictions": ["US"],
+      "feature_types": ["decision_support", "identity_verification", "personalization"],
+      "data_categories": ["biometric", "health", "financial", "precise_location"],
+      "age_groups": ["adult", "teen_13_to_17", "under_13", "all_ages"],
+      "decision_domains": ["credit", "healthcare", "account access"],
+      "keywords": ["biometric", "health", "financial", "consent", "encryption"],
+      "control_ids": ["CTL-PRIV-003", "CTL-PRIV-004"]
+    },
+    {
+      "section_id": "PRIV-1.3",
+      "title": "User content and model provider restrictions",
+      "text": "User content sent to a model provider must be covered by an approved processing purpose and provider agreement. The provider must not train on submitted content unless the user and organization have expressly authorized that use.",
+      "categories": ["privacy"],
+      "jurisdictions": ["US", "global"],
+      "feature_types": ["chatbot", "content_generation", "content_moderation", "personalization"],
+      "data_categories": ["user_content", "account"],
+      "age_groups": ["adult", "teen_13_to_17", "under_13", "all_ages"],
+      "decision_domains": [],
+      "keywords": ["user content", "model provider", "training", "processor"],
+      "control_ids": ["CTL-PRIV-005"]
+    }
+  ]
+}
