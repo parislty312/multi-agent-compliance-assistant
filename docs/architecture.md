@@ -14,3 +14,28 @@ Agent outputs will use strict schemas and evidence references. The language mode
 may identify and explain requirements, but deterministic rules or authorized
 humans own final enforcement actions.
 
+## Decision Flow
+
+```mermaid
+flowchart LR
+    A["Case Intake"] --> B["Schema Validation"]
+    B --> C["Legal Agent"]
+    B --> D["Policy Agent"]
+    C --> E["Control Mapping"]
+    D --> E
+    E --> F["Enforcement Agent"]
+    F --> G["Audit Agent"]
+    G --> H{"Human approval?"}
+    H -->|Yes| I["Compliance Reviewer"]
+    H -->|No| J["Final Decision"]
+    I --> J
+    J --> K["Decision Record"]
+```
+
+## Contract Boundary
+
+- `CaseIntake` is the only accepted input to orchestration.
+- `AgentFinding` is the shared evidence-bearing analysis unit.
+- `ControlRequirement` translates findings into verifiable action.
+- `ComplianceDecision` is the final versioned workflow result.
+- Schema validation happens before and after every agent handoff.

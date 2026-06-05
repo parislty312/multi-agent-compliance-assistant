@@ -34,9 +34,17 @@ required controls, open questions, and an audit trail.
 
 ## Project Status
 
-The repository is in its initial architecture phase. The next milestone is to
-define the case intake schema, agent output contracts, and a benchmark set of
-synthetic compliance scenarios.
+Week 1 foundations are implemented:
+
+- Strict case intake and compliance decision schemas
+- Explicit Legal, Policy, Enforcement, Audit, and Orchestrator ownership
+- Four decision outcomes and a six-category risk taxonomy
+- Fifteen synthetic launch-review benchmark cases
+- API-level intake validation
+- Automated schema and benchmark acceptance tests
+
+See [Week 1 scope](docs/week-1-scope.md) and
+[benchmark documentation](benchmarks/README.md).
 
 ## Safety
 
@@ -47,9 +55,16 @@ employer or customer information.
 ## Development
 
 ```bash
-python3 -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
 pytest
 ```
 
+Start the API:
+
+```bash
+uvicorn src.main:app --reload
+```
+
+Validate an intake payload with `POST /v1/cases/validate`.

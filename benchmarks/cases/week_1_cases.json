@@ -1,0 +1,617 @@
+[
+  {
+    "case": {
+      "case_id": "CASE-001",
+      "title": "Public help center answer assistant",
+      "summary": "A support chatbot answers product questions using only approved public help center articles.",
+      "business_owner": "Customer Support",
+      "feature_type": "chatbot",
+      "intended_use": "Answer low-risk product usage questions and link users to approved documentation.",
+      "prohibited_uses": ["Account decisions", "Legal advice"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": true,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["adult"],
+      "data_categories": ["public"],
+      "automated_decision": false,
+      "decision_domain": null,
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "SupportLM",
+      "model_outputs": ["Help center answer", "Source links"],
+      "human_oversight": {
+        "enabled": true,
+        "reviewer_role": "Support specialist",
+        "review_trigger": "Low confidence or user complaint",
+        "user_appeal_available": true
+      },
+      "retention_days": 30,
+      "user_notice_present": true,
+      "safety_evaluation_complete": true,
+      "known_limitations": ["May not understand account-specific questions"],
+      "open_questions": []
+    },
+    "expected": {
+      "outcome": "allow",
+      "risk_level": "low",
+      "categories": ["transparency"]
+    },
+    "rationale": "Public data, clear notice, and human escalation make this a low-risk baseline."
+  },
+  {
+    "case": {
+      "case_id": "CASE-002",
+      "title": "Internal meeting summary generator",
+      "summary": "An employee tool summarizes routine project meetings and deletes transcripts after processing.",
+      "business_owner": "Workplace Productivity",
+      "feature_type": "content_generation",
+      "intended_use": "Create editable meeting summaries for participating employees after explicit activation.",
+      "prohibited_uses": ["Employee performance scoring", "Secret recording"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": false,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["adult"],
+      "data_categories": ["account", "user_content"],
+      "automated_decision": false,
+      "decision_domain": null,
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "SummaryLM",
+      "model_outputs": ["Editable meeting summary"],
+      "human_oversight": {
+        "enabled": true,
+        "reviewer_role": "Meeting participant",
+        "review_trigger": "Before a summary is shared",
+        "user_appeal_available": true
+      },
+      "retention_days": 7,
+      "user_notice_present": true,
+      "safety_evaluation_complete": true,
+      "known_limitations": ["Speaker attribution may be inaccurate"],
+      "open_questions": []
+    },
+    "expected": {
+      "outcome": "allow",
+      "risk_level": "low",
+      "categories": ["privacy", "transparency"]
+    },
+    "rationale": "Short retention, participant notice, and editable output provide adequate safeguards."
+  },
+  {
+    "case": {
+      "case_id": "CASE-003",
+      "title": "Marketing headline drafting assistant",
+      "summary": "A tool drafts marketing headlines from approved product facts for review by trained employees.",
+      "business_owner": "Marketing",
+      "feature_type": "content_generation",
+      "intended_use": "Draft non-personalized marketing copy that a trained employee reviews before publication.",
+      "prohibited_uses": ["Health claims", "Financial guarantees", "Automatic publishing"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": false,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["adult"],
+      "data_categories": ["public"],
+      "automated_decision": false,
+      "decision_domain": null,
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "CopyLM",
+      "model_outputs": ["Draft headline"],
+      "human_oversight": {
+        "enabled": true,
+        "reviewer_role": "Marketing editor",
+        "review_trigger": "Every generated asset before publication",
+        "user_appeal_available": false
+      },
+      "retention_days": 30,
+      "user_notice_present": true,
+      "safety_evaluation_complete": true,
+      "known_limitations": ["May produce unsupported claims"],
+      "open_questions": []
+    },
+    "expected": {
+      "outcome": "allow",
+      "risk_level": "low",
+      "categories": ["content_safety", "governance"]
+    },
+    "rationale": "The tool is internal, constrained, and subject to mandatory editorial review."
+  },
+  {
+    "case": {
+      "case_id": "CASE-004",
+      "title": "Personalized shopping assistant without retention notice",
+      "summary": "A consumer assistant uses account history to recommend products but the retention notice is incomplete.",
+      "business_owner": "Commerce",
+      "feature_type": "personalization",
+      "intended_use": "Recommend products based on a signed-in adult user's purchase and browsing history.",
+      "prohibited_uses": ["Price discrimination", "Sensitive-trait inference"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": true,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["adult"],
+      "data_categories": ["account", "user_content"],
+      "automated_decision": false,
+      "decision_domain": null,
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "ShopLM",
+      "model_outputs": ["Product recommendations"],
+      "human_oversight": {
+        "enabled": true,
+        "reviewer_role": "Commerce operations specialist",
+        "review_trigger": "User complaint or flagged recommendation",
+        "user_appeal_available": true
+      },
+      "retention_days": 365,
+      "user_notice_present": false,
+      "safety_evaluation_complete": true,
+      "known_limitations": ["Recommendations may reinforce prior preferences"],
+      "open_questions": ["Final retention disclosure text is not approved"]
+    },
+    "expected": {
+      "outcome": "conditional_allow",
+      "risk_level": "medium",
+      "categories": ["privacy", "transparency"]
+    },
+    "rationale": "Launch requires a clear notice and approved retention disclosure."
+  },
+  {
+    "case": {
+      "case_id": "CASE-005",
+      "title": "AI image generator missing misuse reporting",
+      "summary": "A public image generator has prompt filtering but no user-facing mechanism to report harmful output.",
+      "business_owner": "Creative Tools",
+      "feature_type": "content_generation",
+      "intended_use": "Generate general creative images for adult users from text prompts.",
+      "prohibited_uses": ["Sexual content", "Impersonation", "Graphic violence"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": true,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["adult"],
+      "data_categories": ["account", "user_content"],
+      "automated_decision": false,
+      "decision_domain": null,
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "ImageLM",
+      "model_outputs": ["Generated image"],
+      "human_oversight": {
+        "enabled": true,
+        "reviewer_role": "Trust and safety reviewer",
+        "review_trigger": "Automated safety flag",
+        "user_appeal_available": false
+      },
+      "retention_days": 90,
+      "user_notice_present": true,
+      "safety_evaluation_complete": true,
+      "known_limitations": ["Prompt filters can be bypassed"],
+      "open_questions": ["User reporting workflow is not implemented"]
+    },
+    "expected": {
+      "outcome": "conditional_allow",
+      "risk_level": "medium",
+      "categories": ["content_safety", "governance"]
+    },
+    "rationale": "A reporting and response control is required before broad launch."
+  },
+  {
+    "case": {
+      "case_id": "CASE-006",
+      "title": "Teen study assistant with incomplete parental controls",
+      "summary": "A study chatbot supports teenagers but parental controls and age assurance are incomplete.",
+      "business_owner": "Education Products",
+      "feature_type": "chatbot",
+      "intended_use": "Explain school subjects to teenagers and provide age-appropriate practice questions.",
+      "prohibited_uses": ["Romantic roleplay", "Self-harm coaching", "Direct messaging other users"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": true,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["teen_13_to_17"],
+      "data_categories": ["account", "user_content", "minor_data"],
+      "automated_decision": false,
+      "decision_domain": null,
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "StudyLM",
+      "model_outputs": ["Educational explanation", "Practice question"],
+      "human_oversight": {
+        "enabled": true,
+        "reviewer_role": "Child safety specialist",
+        "review_trigger": "Safety classifier alert",
+        "user_appeal_available": true
+      },
+      "retention_days": 30,
+      "user_notice_present": true,
+      "safety_evaluation_complete": true,
+      "known_limitations": ["Age is currently self-declared"],
+      "open_questions": ["Parental control launch date is unconfirmed"]
+    },
+    "expected": {
+      "outcome": "conditional_allow",
+      "risk_level": "medium",
+      "categories": ["child_safety", "privacy", "content_safety"]
+    },
+    "rationale": "A limited launch requires age assurance and parental safety controls."
+  },
+  {
+    "case": {
+      "case_id": "CASE-007",
+      "title": "Customer service sentiment routing",
+      "summary": "A model categorizes support messages for queue routing but does not decide customer eligibility.",
+      "business_owner": "Customer Operations",
+      "feature_type": "decision_support",
+      "intended_use": "Route incoming support messages by topic and urgency for faster human response.",
+      "prohibited_uses": ["Customer eligibility decisions", "Fraud accusations"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": false,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["adult"],
+      "data_categories": ["account", "user_content"],
+      "automated_decision": false,
+      "decision_domain": null,
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "RouteLM",
+      "model_outputs": ["Queue category", "Urgency score"],
+      "human_oversight": {
+        "enabled": true,
+        "reviewer_role": "Support queue manager",
+        "review_trigger": "Low confidence or priority escalation",
+        "user_appeal_available": true
+      },
+      "retention_days": 90,
+      "user_notice_present": false,
+      "safety_evaluation_complete": true,
+      "known_limitations": ["Sentiment varies across dialects"],
+      "open_questions": []
+    },
+    "expected": {
+      "outcome": "conditional_allow",
+      "risk_level": "medium",
+      "categories": ["transparency", "governance"]
+    },
+    "rationale": "The routing is low impact, but notice and bias monitoring are required controls."
+  },
+  {
+    "case": {
+      "case_id": "CASE-008",
+      "title": "Voice assistant with optional biometric template",
+      "summary": "A voice assistant can store an optional voice template for speaker recognition and personalization.",
+      "business_owner": "Voice Experiences",
+      "feature_type": "personalization",
+      "intended_use": "Recognize a consenting adult user and personalize voice assistant preferences.",
+      "prohibited_uses": ["Surveillance", "Identity proofing", "Emotion inference"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": true,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["adult"],
+      "data_categories": ["account", "biometric"],
+      "automated_decision": false,
+      "decision_domain": null,
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "VoiceLM",
+      "model_outputs": ["Speaker match", "Personalized response"],
+      "human_oversight": {
+        "enabled": true,
+        "reviewer_role": "Privacy operations specialist",
+        "review_trigger": "Deletion request or failed identity match",
+        "user_appeal_available": true
+      },
+      "retention_days": 365,
+      "user_notice_present": true,
+      "safety_evaluation_complete": true,
+      "known_limitations": ["Accuracy varies with background noise"],
+      "open_questions": ["Biometric consent record format is not finalized"]
+    },
+    "expected": {
+      "outcome": "conditional_allow",
+      "risk_level": "medium",
+      "categories": ["privacy", "governance"]
+    },
+    "rationale": "Explicit consent, deletion, and consent-record controls must be completed."
+  },
+  {
+    "case": {
+      "case_id": "CASE-009",
+      "title": "Resume screening recommendation model",
+      "summary": "An AI model ranks job applicants and recommends which candidates should receive interviews.",
+      "business_owner": "Talent Acquisition",
+      "feature_type": "decision_support",
+      "intended_use": "Rank applicants for recruiter review using resume experience and role requirements.",
+      "prohibited_uses": ["Protected-trait inference", "Automatic rejection without review"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": false,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["adult"],
+      "data_categories": ["contact", "employment", "education"],
+      "automated_decision": true,
+      "decision_domain": "employment",
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "TalentRankLM",
+      "model_outputs": ["Applicant ranking", "Interview recommendation"],
+      "human_oversight": {
+        "enabled": true,
+        "reviewer_role": "Recruiter",
+        "review_trigger": "Every recommendation before candidate disposition",
+        "user_appeal_available": false
+      },
+      "retention_days": 730,
+      "user_notice_present": false,
+      "safety_evaluation_complete": false,
+      "known_limitations": ["Historical hiring data may contain bias"],
+      "open_questions": ["Independent bias audit is incomplete"]
+    },
+    "expected": {
+      "outcome": "escalate",
+      "risk_level": "high",
+      "categories": ["high_impact_decision", "transparency", "governance"]
+    },
+    "rationale": "Employment ranking requires specialist review, notice, appeal, and bias evidence."
+  },
+  {
+    "case": {
+      "case_id": "CASE-010",
+      "title": "Credit line increase recommendation",
+      "summary": "A model recommends credit line increases using transaction and account behavior data.",
+      "business_owner": "Consumer Lending",
+      "feature_type": "decision_support",
+      "intended_use": "Recommend credit line adjustments for final review by an authorized lending analyst.",
+      "prohibited_uses": ["Use of protected traits", "Fully autonomous adverse action"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": false,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["adult"],
+      "data_categories": ["account", "financial"],
+      "automated_decision": true,
+      "decision_domain": "credit",
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "CreditAssistLM",
+      "model_outputs": ["Credit line recommendation", "Reason codes"],
+      "human_oversight": {
+        "enabled": true,
+        "reviewer_role": "Lending analyst",
+        "review_trigger": "Every recommendation",
+        "user_appeal_available": true
+      },
+      "retention_days": 1825,
+      "user_notice_present": true,
+      "safety_evaluation_complete": false,
+      "known_limitations": ["Reason-code stability is unverified"],
+      "open_questions": ["Fair lending validation has not been approved"]
+    },
+    "expected": {
+      "outcome": "escalate",
+      "risk_level": "high",
+      "categories": ["high_impact_decision", "privacy", "governance"]
+    },
+    "rationale": "Financial eligibility is high impact and needs formal model risk and legal review."
+  },
+  {
+    "case": {
+      "case_id": "CASE-011",
+      "title": "Symptom triage chatbot",
+      "summary": "A health chatbot recommends whether users should seek emergency, urgent, or routine medical care.",
+      "business_owner": "Digital Health",
+      "feature_type": "decision_support",
+      "intended_use": "Provide preliminary symptom triage recommendations before a user contacts a clinician.",
+      "prohibited_uses": ["Diagnosis", "Medication prescribing"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": true,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["adult"],
+      "data_categories": ["health", "user_content"],
+      "automated_decision": true,
+      "decision_domain": "healthcare access",
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "TriageLM",
+      "model_outputs": ["Care urgency recommendation"],
+      "human_oversight": {
+        "enabled": true,
+        "reviewer_role": "Licensed clinician",
+        "review_trigger": "High-risk symptom or low confidence",
+        "user_appeal_available": true
+      },
+      "retention_days": 365,
+      "user_notice_present": true,
+      "safety_evaluation_complete": false,
+      "known_limitations": ["Rare emergencies may be missed"],
+      "open_questions": ["Clinical validation is incomplete"]
+    },
+    "expected": {
+      "outcome": "escalate",
+      "risk_level": "high",
+      "categories": ["high_impact_decision", "privacy", "content_safety"]
+    },
+    "rationale": "Care-access recommendations and health data require clinical and legal review."
+  },
+  {
+    "case": {
+      "case_id": "CASE-012",
+      "title": "Remote exam behavior risk scoring",
+      "summary": "A vision model scores students for suspected cheating based on gaze and movement patterns.",
+      "business_owner": "Assessment Integrity",
+      "feature_type": "decision_support",
+      "intended_use": "Flag remote exam sessions for review by trained academic integrity staff.",
+      "prohibited_uses": ["Automatic discipline", "Emotion inference"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": true,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["teen_13_to_17", "adult"],
+      "data_categories": ["biometric", "education", "minor_data"],
+      "automated_decision": true,
+      "decision_domain": "education discipline",
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "ExamWatchLM",
+      "model_outputs": ["Behavior risk score", "Flagged video segment"],
+      "human_oversight": {
+        "enabled": true,
+        "reviewer_role": "Academic integrity reviewer",
+        "review_trigger": "Every model flag",
+        "user_appeal_available": true
+      },
+      "retention_days": 180,
+      "user_notice_present": true,
+      "safety_evaluation_complete": false,
+      "known_limitations": ["Disability-related movement may trigger false positives"],
+      "open_questions": ["Accessibility impact assessment is incomplete"]
+    },
+    "expected": {
+      "outcome": "escalate",
+      "risk_level": "high",
+      "categories": ["high_impact_decision", "child_safety", "privacy", "governance"]
+    },
+    "rationale": "Biometric monitoring, minors, disability risk, and discipline impact require expert review."
+  },
+  {
+    "case": {
+      "case_id": "CASE-013",
+      "title": "Facial identity verification for account recovery",
+      "summary": "A face matching model verifies users during account recovery when other recovery methods fail.",
+      "business_owner": "Account Integrity",
+      "feature_type": "identity_verification",
+      "intended_use": "Compare a live selfie with an enrolled identity image for account recovery.",
+      "prohibited_uses": ["Law enforcement search", "Emotion inference", "Marketing"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": true,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["adult"],
+      "data_categories": ["account", "biometric"],
+      "automated_decision": true,
+      "decision_domain": "account access",
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "FaceVerifyLM",
+      "model_outputs": ["Identity match score"],
+      "human_oversight": {
+        "enabled": true,
+        "reviewer_role": "Account recovery specialist",
+        "review_trigger": "Failed or ambiguous match",
+        "user_appeal_available": true
+      },
+      "retention_days": 30,
+      "user_notice_present": true,
+      "safety_evaluation_complete": true,
+      "known_limitations": ["Performance varies across lighting conditions"],
+      "open_questions": ["State-specific biometric review is pending"]
+    },
+    "expected": {
+      "outcome": "escalate",
+      "risk_level": "high",
+      "categories": ["privacy", "high_impact_decision", "governance"]
+    },
+    "rationale": "Biometric identity verification requires jurisdiction-specific review despite safeguards."
+  },
+  {
+    "case": {
+      "case_id": "CASE-014",
+      "title": "Under-thirteen companion chatbot without consent",
+      "summary": "A conversational companion targets children under thirteen and stores open-ended conversations.",
+      "business_owner": "Youth Experiences",
+      "feature_type": "chatbot",
+      "intended_use": "Provide entertainment and emotional companionship to children under thirteen.",
+      "prohibited_uses": ["Sexual content", "Requests for offline contact"],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": true,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["under_13"],
+      "data_categories": ["account", "user_content", "minor_data"],
+      "automated_decision": false,
+      "decision_domain": null,
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "CompanionLM",
+      "model_outputs": ["Conversational response"],
+      "human_oversight": {
+        "enabled": false,
+        "reviewer_role": null,
+        "review_trigger": null,
+        "user_appeal_available": false
+      },
+      "retention_days": 365,
+      "user_notice_present": false,
+      "safety_evaluation_complete": false,
+      "known_limitations": ["The model may encourage emotional dependency"],
+      "open_questions": ["Verifiable parental consent is not designed"]
+    },
+    "expected": {
+      "outcome": "deny",
+      "risk_level": "critical",
+      "categories": ["child_safety", "privacy", "content_safety"]
+    },
+    "rationale": "The proposed launch lacks fundamental consent, safety, and oversight safeguards for children."
+  },
+  {
+    "case": {
+      "case_id": "CASE-015",
+      "title": "Autonomous employee termination engine",
+      "summary": "A model selects employees for termination and automatically sends termination decisions.",
+      "business_owner": "Workforce Management",
+      "feature_type": "decision_support",
+      "intended_use": "Choose employees for termination using productivity, attendance, and manager feedback data.",
+      "prohibited_uses": [],
+      "deployment": {
+        "target_markets": ["US"],
+        "ai_act_role": "not_applicable",
+        "external_users": false,
+        "launch_stage": "pre_launch"
+      },
+      "affected_age_groups": ["adult"],
+      "data_categories": ["employment", "account", "user_content"],
+      "automated_decision": true,
+      "decision_domain": "employment termination",
+      "model_provider": "Synthetic AI Vendor",
+      "model_name": "WorkforceDecisionLM",
+      "model_outputs": ["Termination decision", "Automated employee notice"],
+      "human_oversight": {
+        "enabled": false,
+        "reviewer_role": null,
+        "review_trigger": null,
+        "user_appeal_available": false
+      },
+      "retention_days": 2555,
+      "user_notice_present": false,
+      "safety_evaluation_complete": false,
+      "known_limitations": ["Historical performance data may encode manager bias"],
+      "open_questions": []
+    },
+    "expected": {
+      "outcome": "deny",
+      "risk_level": "critical",
+      "categories": ["high_impact_decision", "transparency", "governance"]
+    },
+    "rationale": "Fully autonomous termination without review or appeal violates the MVP's prohibited-use boundary."
+  }
+]
