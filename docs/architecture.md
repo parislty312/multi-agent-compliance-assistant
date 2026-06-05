@@ -56,3 +56,21 @@ flowchart LR
 The Week 2 retriever is intentionally deterministic. It exposes scoring reasons
 and preserves exact policy section text, allowing future embedding retrieval to
 be evaluated against a transparent baseline.
+
+## Parallel Analysis Layer
+
+```mermaid
+flowchart LR
+    A["Validated Case"] --> B["Evidence Retriever"]
+    B --> C["Immutable Evidence Snapshot"]
+    C --> D["Legal Agent"]
+    C --> E["Policy Agent"]
+    D --> F["Citation Validator"]
+    E --> F
+    F --> G["Parallel Analysis Response"]
+```
+
+Legal and Policy agents run independently against the same evidence snapshot.
+They cannot query unversioned sources during analysis. Findings that cannot cite
+an exact retrieved section are rejected, while missing evidence is represented
+as an explicit abstention.

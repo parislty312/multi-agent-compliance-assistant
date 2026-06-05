@@ -48,7 +48,7 @@ class AgentFinding(StrictModel):
 
 
 class ControlRequirement(StrictModel):
-    control_id: str = Field(pattern=r"^CTL-\d{3}$")
+    control_id: str = Field(pattern=r"^CTL-(?:\d{3}|[A-Z]+-\d{3})$")
     title: str = Field(min_length=5, max_length=150)
     description: str = Field(min_length=10, max_length=1000)
     owner: str = Field(min_length=2, max_length=100)
@@ -91,4 +91,3 @@ class ComplianceDecision(StrictModel):
         }:
             raise ValueError("deny requires high or critical risk")
         return self
-

@@ -1,7 +1,14 @@
 from fastapi import FastAPI
 
 from src.knowledge import PolicyRetriever
-from src.models import CaseIntake, EvidenceQuery, EvidenceResponse
+from src.models import (
+    CaseAnalysisRequest,
+    CaseIntake,
+    EvidenceQuery,
+    EvidenceResponse,
+    ParallelAnalysisResponse,
+)
+from src.orchestration import AnalysisWorkflow
 
 app = FastAPI(
     title="Multi-Agent Compliance Assistant",
@@ -9,6 +16,7 @@ app = FastAPI(
     version="0.1.0",
 )
 retriever = PolicyRetriever()
+analysis_workflow = AnalysisWorkflow(retriever=retriever)
 
 
 @app.get("/health")
@@ -45,3 +53,9 @@ def list_policies() -> dict[str, object]:
             for document in retriever.documents
         ],
     }
+
+
+@app.post("/v1/analysis/run", response_model=ParallelAnalysisResponse)
+def run_analysis(request: CaseAnalysisRequest) -> ParallelAnalysisResponse:
+    """Run Legal and Policy analysis in parallel against one evidence snapshot."""
+    return analysis_workflow.analyze(request.case, top_k=request.top_k)

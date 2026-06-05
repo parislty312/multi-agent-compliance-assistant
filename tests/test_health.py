@@ -53,3 +53,22 @@ def test_list_policies_exposes_version_metadata() -> None:
     assert len(body["policies"]) == 6
     assert all(policy["synthetic"] for policy in body["policies"])
     assert all(policy["version"] == "1.0.0" for policy in body["policies"])
+
+
+def test_run_parallel_analysis() -> None:
+    benchmark_path = (
+        Path(__file__).parents[1] / "benchmarks" / "cases" / "week_1_cases.json"
+    )
+    payload = json.loads(benchmark_path.read_text(encoding="utf-8"))[9]["case"]
+
+    response = client.post(
+        "/v1/analysis/run",
+        json={"case": payload, "top_k": 8},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["case_id"] == "CASE-010"
+    assert body["legal"]["findings"]
+    assert body["policy"]["findings"]
+    assert body["policy"]["controls"]

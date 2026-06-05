@@ -51,8 +51,16 @@ Week 2 evidence foundations are implemented:
 - Evidence retrieval and policy inventory APIs
 - Complete expected-category recall across the 15-case benchmark at Top-8
 
+Week 3 analysis foundations are implemented:
+
+- Parallel Legal and Policy agents sharing one evidence snapshot
+- Evidence-bound findings with strict citation validation
+- Abstention when required evidence is missing
+- Policy-to-control mapping with ownership and verification methods
+- Agent analysis API and benchmark evaluation
+
 See [Week 1 scope](docs/week-1-scope.md) and
-[Week 2 knowledge base](docs/week-2-knowledge-base.md).
+[Week 3 Legal and Policy agents](docs/week-3-legal-policy-agents.md).
 
 ## Safety
 
@@ -77,9 +85,11 @@ uvicorn src.main:app --reload
 
 Validate an intake payload with `POST /v1/cases/validate`.
 Retrieve versioned evidence with `POST /v1/evidence/retrieve`.
+Run parallel analysis with `POST /v1/analysis/run`.
 
 Run the deterministic retrieval benchmark:
 
 ```bash
 python scripts/evaluate_retrieval.py
+python scripts/evaluate_agents.py
 ```

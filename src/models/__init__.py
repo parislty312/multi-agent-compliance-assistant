@@ -1,5 +1,11 @@
 """Shared structured data contracts."""
 
+from src.models.analysis import (
+    AgentAnalysis,
+    CaseAnalysisRequest,
+    ParallelAnalysisResponse,
+    PolicyAnalysis,
+)
 from src.models.case import (
     AgeGroup,
     AIActRole,
@@ -31,9 +37,11 @@ from src.models.evidence import (
 __all__ = [
     "AIActRole",
     "AgeGroup",
+    "AgentAnalysis",
     "AgentFinding",
     "AuditResult",
     "CaseIntake",
+    "CaseAnalysisRequest",
     "Citation",
     "ComplianceDecision",
     "ControlRequirement",
@@ -49,5 +57,7 @@ __all__ = [
     "FindingSeverity",
     "HumanOversight",
     "PolicyDocument",
+    "PolicyAnalysis",
     "PolicySection",
+    "ParallelAnalysisResponse",
 ]
