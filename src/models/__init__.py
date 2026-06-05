@@ -6,6 +6,15 @@ from src.models.analysis import (
     ParallelAnalysisResponse,
     PolicyAnalysis,
 )
+from src.models.audit import (
+    AuditedLaunchReview,
+    AuditCheck,
+    AuditCheckStatus,
+    AuditReport,
+    AuditRequest,
+    AuditVerdict,
+    DecisionRecord,
+)
 from src.models.case import (
     AgeGroup,
     AIActRole,
@@ -47,7 +56,13 @@ __all__ = [
     "AgeGroup",
     "AgentAnalysis",
     "AgentFinding",
+    "AuditedLaunchReview",
+    "AuditCheck",
+    "AuditCheckStatus",
+    "AuditReport",
+    "AuditRequest",
     "AuditResult",
+    "AuditVerdict",
     "CaseIntake",
     "CaseAnalysisRequest",
     "Citation",
@@ -55,6 +70,7 @@ __all__ = [
     "ControlRequirement",
     "DataCategory",
     "DecisionOutcome",
+    "DecisionRecord",
     "DeploymentContext",
     "EvidenceChunk",
     "EvidenceMatch",

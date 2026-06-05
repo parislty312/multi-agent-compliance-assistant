@@ -93,3 +93,20 @@ flowchart LR
 The enforcement layer is deterministic and does not invoke a language model.
 It applies explicit rule priorities, requires supporting analysis categories,
 and records every evaluated predicate and input fact.
+
+## Audit Layer
+
+```mermaid
+flowchart LR
+    A["Case"] --> D["Audit Agent"]
+    B["Evidence and Agent Analysis"] --> D
+    C["Enforcement Result"] --> D
+    E["Independent Rule Engine"] --> D
+    D --> F["Audit Verdict"]
+    D --> G["Canonical Decision Record"]
+    G --> H["SHA-256 Content Hash"]
+```
+
+The Audit Agent validates lineage and independently replays enforcement. The
+resulting content hash makes later changes detectable, while durable
+immutability remains the responsibility of a future storage layer.

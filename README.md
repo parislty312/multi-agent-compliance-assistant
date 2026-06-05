@@ -68,8 +68,17 @@ Week 4 enforcement foundations are implemented:
 - End-to-end launch review API
 - 100% expected-outcome accuracy on the 15-case benchmark
 
+Week 5 audit foundations are implemented:
+
+- Independent eight-check Audit Agent
+- Exact citation, evidence version, and control lineage validation
+- Deterministic enforcement replay
+- Explicit abstention and human-boundary checks
+- Canonical SHA-256 tamper-evident decision records
+- Adversarial audit tests and record verification API
+
 See [Week 1 scope](docs/week-1-scope.md) and
-[Week 4 Enforcement Agent](docs/week-4-enforcement-agent.md).
+[Week 5 Audit Agent](docs/week-5-audit-agent.md).
 
 ## Safety
 
@@ -96,6 +105,8 @@ Validate an intake payload with `POST /v1/cases/validate`.
 Retrieve versioned evidence with `POST /v1/evidence/retrieve`.
 Run parallel analysis with `POST /v1/analysis/run`.
 Evaluate a launch with `POST /v1/enforcement/evaluate`.
+Audit a launch with `POST /v1/audit/run`.
+Verify a decision record with `POST /v1/audit/verify`.
 
 Run the deterministic retrieval benchmark:
 
@@ -103,4 +114,5 @@ Run the deterministic retrieval benchmark:
 python scripts/evaluate_retrieval.py
 python scripts/evaluate_agents.py
 python scripts/evaluate_enforcement.py
+python scripts/evaluate_audit.py
 ```

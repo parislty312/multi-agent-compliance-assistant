@@ -9,6 +9,7 @@ from src.models import (
     AgentFinding,
     CaseIntake,
     ControlRequirement,
+    DataCategory,
     EvidenceResponse,
     FindingCategory,
     FindingSeverity,
@@ -108,11 +109,11 @@ class PolicyAgent:
             FindingCategory.PRIVACY,
             FindingCategory.TRANSPARENCY,
         }
-        if not case.safety_evaluation_complete or case.feature_type.value in {
-            "chatbot",
-            "content_generation",
-            "content_moderation",
-        }:
+        if (
+            case.feature_type.value
+            in {"chatbot", "content_generation", "content_moderation"}
+            or DataCategory.HEALTH in case.data_categories
+        ):
             categories.add(FindingCategory.CONTENT_SAFETY)
         if case.automated_decision:
             categories.add(FindingCategory.HIGH_IMPACT_DECISION)

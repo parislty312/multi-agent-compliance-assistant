@@ -89,7 +89,11 @@ class LegalAgent:
             categories.add(FindingCategory.CHILD_SAFETY)
         if case.automated_decision:
             categories.add(FindingCategory.HIGH_IMPACT_DECISION)
-        if case.feature_type.value in {"chatbot", "content_generation", "content_moderation"}:
+        if (
+            case.feature_type.value
+            in {"chatbot", "content_generation", "content_moderation"}
+            or DataCategory.HEALTH in case.data_categories
+        ):
             categories.add(FindingCategory.CONTENT_SAFETY)
         return categories
 

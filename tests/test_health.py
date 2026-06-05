@@ -91,3 +91,26 @@ def test_evaluate_enforcement() -> None:
     assert body["enforcement"]["winning_rule_id"] == "RULE-DENY-002"
     assert body["enforcement"]["ruleset_version"] == "1.0.0"
     assert body["enforcement"]["rule_trace"]
+
+
+def test_run_audit_and_create_record() -> None:
+    benchmark_path = (
+        Path(__file__).parents[1] / "benchmarks" / "cases" / "week_1_cases.json"
+    )
+    payload = json.loads(benchmark_path.read_text(encoding="utf-8"))[8]["case"]
+
+    response = client.post(
+        "/v1/audit/run",
+        json={"case": payload, "top_k": 8},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["audit"]["verdict"] == "pass"
+    assert len(body["audit"]["checks"]) == 8
+    assert body["record"]["hash_algorithm"] == "sha256"
+    assert len(body["record"]["content_hash"]) == 64
+
+    verify_response = client.post("/v1/audit/verify", json=body["record"])
+    assert verify_response.status_code == 200
+    assert verify_response.json()["valid"] is True
