@@ -1,6 +1,10 @@
 import os
+import json
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from src.audit import verify_decision_record
 from src.knowledge import PolicyRetriever
@@ -51,6 +55,15 @@ durable_orchestrator = DurableOrchestrator(
     repository=workflow_repository,
     analysis_workflow=analysis_workflow,
 )
+project_root = Path(__file__).parents[1]
+frontend_dir = project_root / "frontend"
+benchmark_path = project_root / "benchmarks" / "cases" / "week_1_cases.json"
+app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
+
+
+@app.get("/", include_in_schema=False)
+def review_console() -> FileResponse:
+    return FileResponse(frontend_dir / "index.html")
 
 
 @app.get("/health")
@@ -86,6 +99,21 @@ def list_policies() -> dict[str, object]:
             }
             for document in retriever.documents
         ],
+    }
+
+
+@app.get("/v1/demo/cases")
+def list_demo_cases() -> dict[str, object]:
+    benchmarks = json.loads(benchmark_path.read_text(encoding="utf-8"))
+    return {
+        "cases": [
+            {
+                "case": item["case"],
+                "expected": item["expected"],
+                "rationale": item["rationale"],
+            }
+            for item in benchmarks
+        ]
     }
 
 

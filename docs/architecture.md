@@ -132,3 +132,22 @@ flowchart LR
 Every transition updates the materialized run state and appends a hash-chained
 event. Optimistic version checks prevent stale workers or reviewers from
 overwriting newer state.
+
+## Review Console
+
+```mermaid
+flowchart LR
+    A["Synthetic Case Templates"] --> B["Case Intake"]
+    B --> C["Durable Workflow API"]
+    C --> D["Decision Workspace"]
+    D --> E["Agent Findings"]
+    D --> F["Evidence and Controls"]
+    D --> G["Audit and Timeline"]
+    D --> H["Human Decision Panel"]
+    H --> C
+```
+
+The browser console is a thin same-origin client over the durable API. It does
+not duplicate policy or decision logic. The UI renders the stored evidence,
+agent outputs, enforcement result, audit checks, record hash, and event chain,
+then sends human decisions back through the versioned workflow endpoint.

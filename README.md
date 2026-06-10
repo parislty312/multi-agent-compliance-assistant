@@ -87,8 +87,17 @@ Week 6 orchestration foundations are implemented:
 - Hash-chained case timeline and tamper detection
 - Failure recovery from the latest completed stage
 
+Week 7 review-console foundations are implemented:
+
+- Responsive case intake and workflow dashboard
+- Fifteen selectable synthetic launch scenarios
+- Decision, risk, agent, evidence, control, audit, and timeline views
+- Human approve, reject, and override actions
+- Visible record hash and event-chain integrity status
+- Same-origin FastAPI delivery with no frontend build step
+
 See [Week 1 scope](docs/week-1-scope.md) and
-[Week 6 Durable Orchestration](docs/week-6-durable-orchestration.md).
+[Week 7 Review Console](docs/week-7-review-console.md).
 
 ## Safety
 
@@ -109,6 +118,12 @@ Start the API:
 
 ```bash
 uvicorn src.main:app --reload
+```
+
+Open the Review Console at:
+
+```text
+http://127.0.0.1:8000/
 ```
 
 Validate an intake payload with `POST /v1/cases/validate`.

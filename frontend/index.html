@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Auditable multi-agent compliance review console for AI product launches."
+    >
+    <title>Compliance Review Console</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#workspace">Skip to review workspace</a>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">CR</span>
+        <div>
+          <strong>Compliance Review Console</strong>
+          <span>Multi-agent AI launch governance</span>
+        </div>
+      </div>
+      <div class="topbar-meta">
+        <span class="environment-pill">Synthetic policy environment</span>
+        <a href="/docs" target="_blank" rel="noreferrer">API docs</a>
+      </div>
+    </header>
+
+    <main id="workspace" class="workspace">
+      <aside class="intake-panel" aria-labelledby="intake-title">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Case intake</p>
+            <h1 id="intake-title">Review an AI launch</h1>
+          </div>
+          <span id="case-id-badge" class="case-id">CASE</span>
+        </div>
+
+        <div class="field-group">
+          <label for="case-template">Synthetic scenario</label>
+          <select id="case-template" data-testid="case-template">
+            <option value="">Loading scenarios...</option>
+          </select>
+          <p id="template-rationale" class="field-help">
+            Choose a benchmark scenario, then adjust the case JSON if needed.
+          </p>
+        </div>
+
+        <div class="case-facts" aria-label="Selected case facts">
+          <div>
+            <span>Owner</span>
+            <strong id="fact-owner">Not selected</strong>
+          </div>
+          <div>
+            <span>Feature</span>
+            <strong id="fact-feature">Not selected</strong>
+          </div>
+          <div>
+            <span>Market</span>
+            <strong id="fact-market">Not selected</strong>
+          </div>
+          <div>
+            <span>Expected</span>
+            <strong id="fact-expected">Not selected</strong>
+          </div>
+        </div>
+
+        <div class="field-group json-field">
+          <div class="label-row">
+            <label for="case-json">Case payload</label>
+            <button id="format-json" class="text-button" type="button">Format JSON</button>
+          </div>
+          <textarea
+            id="case-json"
+            data-testid="case-json"
+            spellcheck="false"
+            aria-describedby="json-help"
+          ></textarea>
+          <p id="json-help" class="field-help">
+            Public and synthetic data only. This prototype does not provide legal advice.
+          </p>
+        </div>
+
+        <div id="intake-error" class="message error-message" role="alert" hidden></div>
+
+        <button id="run-review" class="primary-button" type="button" data-testid="run-review">
+          Run compliance review
+        </button>
+      </aside>
+
+      <section class="review-panel" aria-live="polite">
+        <div id="empty-state" class="empty-state">
+          <div class="empty-icon" aria-hidden="true">01</div>
+          <p class="eyebrow">Ready for review</p>
+          <h2>From product facts to an auditable launch decision</h2>
+          <p>
+            Select a synthetic scenario to run Legal, Policy, Enforcement, and Audit
+            stages through the durable workflow.
+          </p>
+          <ol class="empty-steps">
+            <li><span>1</span>Validate case intake</li>
+            <li><span>2</span>Retrieve versioned policy evidence</li>
+            <li><span>3</span>Run specialist agents and deterministic rules</li>
+            <li><span>4</span>Audit the result and route human approval</li>
+          </ol>
+        </div>
+
+        <div id="loading-state" class="loading-state" hidden>
+          <div class="spinner" aria-hidden="true"></div>
+          <p class="eyebrow">Workflow running</p>
+          <h2>Reviewing the launch case</h2>
+          <p>Retrieving evidence and coordinating specialist agents.</p>
+        </div>
+
+        <div id="results" hidden>
+          <section class="decision-header">
+            <div>
+              <div class="decision-kicker">
+                <span id="status-badge" class="status-badge">Status</span>
+                <span id="run-id" class="mono"></span>
+              </div>
+              <h2 id="decision-title">Launch decision</h2>
+              <p id="decision-summary"></p>
+            </div>
+            <div class="decision-score">
+              <span>Risk level</span>
+              <strong id="risk-level">-</strong>
+            </div>
+          </section>
+
+          <div class="metric-strip">
+            <div><span>Legal findings</span><strong id="metric-legal">0</strong></div>
+            <div><span>Policy findings</span><strong id="metric-policy">0</strong></div>
+            <div><span>Required controls</span><strong id="metric-controls">0</strong></div>
+            <div><span>Audit checks</span><strong id="metric-audit">0</strong></div>
+          </div>
+
+          <nav class="tabs" aria-label="Review detail views">
+            <button class="tab active" data-tab="overview" type="button">Overview</button>
+            <button class="tab" data-tab="agents" type="button">Agent findings</button>
+            <button class="tab" data-tab="evidence" type="button">Evidence</button>
+            <button class="tab" data-tab="controls" type="button">Controls</button>
+            <button class="tab" data-tab="audit" type="button">Audit</button>
+            <button class="tab" data-tab="timeline" type="button">Timeline</button>
+          </nav>
+
+          <div id="tab-overview" class="tab-panel active">
+            <div class="two-column">
+              <section class="content-section">
+                <div class="section-heading">
+                  <div>
+                    <p class="eyebrow">Decision basis</p>
+                    <h3>Winning enforcement rule</h3>
+                  </div>
+                  <span id="winning-rule" class="rule-id"></span>
+                </div>
+                <p id="rule-explanation"></p>
+                <dl class="detail-list">
+                  <div><dt>Ruleset</dt><dd id="ruleset-version"></dd></div>
+                  <div><dt>Evidence index</dt><dd id="evidence-version"></dd></div>
+                  <div><dt>Record ID</dt><dd id="record-id"></dd></div>
+                  <div><dt>Hash status</dt><dd id="hash-status"></dd></div>
+                </dl>
+              </section>
+              <section class="content-section">
+                <div class="section-heading">
+                  <div>
+                    <p class="eyebrow">Open items</p>
+                    <h3>Questions and limitations</h3>
+                  </div>
+                </div>
+                <ul id="open-questions" class="plain-list"></ul>
+              </section>
+            </div>
+          </div>
+
+          <div id="tab-agents" class="tab-panel">
+            <div class="agent-grid">
+              <section class="content-section">
+                <div class="agent-heading legal">
+                  <span>L</span>
+                  <div><h3>Legal Agent</h3><p id="legal-summary"></p></div>
+                </div>
+                <div id="legal-findings" class="stack"></div>
+              </section>
+              <section class="content-section">
+                <div class="agent-heading policy">
+                  <span>P</span>
+                  <div><h3>Policy Agent</h3><p id="policy-summary"></p></div>
+                </div>
+                <div id="policy-findings" class="stack"></div>
+              </section>
+            </div>
+          </div>
+
+          <div id="tab-evidence" class="tab-panel">
+            <section class="content-section">
+              <div class="section-heading">
+                <div><p class="eyebrow">Source material</p><h3>Retrieved policy evidence</h3></div>
+                <span id="evidence-count" class="count-pill"></span>
+              </div>
+              <div id="evidence-list" class="stack"></div>
+            </section>
+          </div>
+
+          <div id="tab-controls" class="tab-panel">
+            <section class="content-section">
+              <div class="section-heading">
+                <div><p class="eyebrow">Launch requirements</p><h3>Control remediation plan</h3></div>
+              </div>
+              <div id="controls-list" class="stack"></div>
+            </section>
+          </div>
+
+          <div id="tab-audit" class="tab-panel">
+            <section class="content-section">
+              <div class="section-heading">
+                <div><p class="eyebrow">Independent review</p><h3>Audit checks</h3></div>
+                <span id="audit-verdict" class="status-badge"></span>
+              </div>
+              <div id="audit-list" class="audit-grid"></div>
+            </section>
+          </div>
+
+          <div id="tab-timeline" class="tab-panel">
+            <section class="content-section">
+              <div class="section-heading">
+                <div><p class="eyebrow">Durable workflow</p><h3>Case timeline</h3></div>
+                <span id="chain-status" class="count-pill"></span>
+              </div>
+              <ol id="timeline-list" class="timeline"></ol>
+            </section>
+          </div>
+
+          <section id="approval-panel" class="approval-panel" hidden>
+            <div>
+              <p class="eyebrow">Human decision required</p>
+              <h3>Review and resolve this case</h3>
+              <p>
+                The original enforcement and audit records remain preserved if you override.
+              </p>
+            </div>
+            <div class="approval-form">
+              <label for="reviewer-name">Reviewer</label>
+              <input id="reviewer-name" type="text" value="Compliance Reviewer">
+              <label for="review-rationale">Decision rationale</label>
+              <textarea id="review-rationale">Reviewed the evidence, controls, and audit record.</textarea>
+              <div class="approval-actions">
+                <button id="approve-review" class="primary-button" type="button">Approve</button>
+                <button id="override-review" class="secondary-button" type="button">
+                  Override to conditional
+                </button>
+                <button id="reject-review" class="danger-button" type="button">Reject</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>
