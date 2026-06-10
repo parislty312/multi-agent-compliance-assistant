@@ -50,10 +50,22 @@ from src.models.enforcement import (
     LaunchReviewResponse,
     RuleTrace,
 )
+from src.models.workflow import (
+    ApprovalAction,
+    ApprovalRequest,
+    HumanDecision,
+    StartWorkflowRequest,
+    WorkflowEvent,
+    WorkflowRun,
+    WorkflowStage,
+    WorkflowStatus,
+)
 
 __all__ = [
     "AIActRole",
     "AgeGroup",
+    "ApprovalAction",
+    "ApprovalRequest",
     "AgentAnalysis",
     "AgentFinding",
     "AuditedLaunchReview",
@@ -84,10 +96,16 @@ __all__ = [
     "FindingCategory",
     "FindingSeverity",
     "HumanOversight",
+    "HumanDecision",
     "LaunchReviewResponse",
     "PolicyDocument",
     "PolicyAnalysis",
     "PolicySection",
     "ParallelAnalysisResponse",
     "RuleTrace",
+    "StartWorkflowRequest",
+    "WorkflowEvent",
+    "WorkflowRun",
+    "WorkflowStage",
+    "WorkflowStatus",
 ]

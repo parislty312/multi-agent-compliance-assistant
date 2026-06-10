@@ -77,8 +77,18 @@ Week 5 audit foundations are implemented:
 - Canonical SHA-256 tamper-evident decision records
 - Adversarial audit tests and record verification API
 
+Week 6 orchestration foundations are implemented:
+
+- Explicit resumable workflow state machine
+- SQLite checkpoints after analysis, enforcement, and audit
+- Idempotent workflow creation
+- Optimistic concurrency control
+- Human approve, reject, and override actions
+- Hash-chained case timeline and tamper detection
+- Failure recovery from the latest completed stage
+
 See [Week 1 scope](docs/week-1-scope.md) and
-[Week 5 Audit Agent](docs/week-5-audit-agent.md).
+[Week 6 Durable Orchestration](docs/week-6-durable-orchestration.md).
 
 ## Safety
 
@@ -107,6 +117,7 @@ Run parallel analysis with `POST /v1/analysis/run`.
 Evaluate a launch with `POST /v1/enforcement/evaluate`.
 Audit a launch with `POST /v1/audit/run`.
 Verify a decision record with `POST /v1/audit/verify`.
+Start a durable workflow with `POST /v1/workflows`.
 
 Run the deterministic retrieval benchmark:
 
@@ -115,4 +126,5 @@ python scripts/evaluate_retrieval.py
 python scripts/evaluate_agents.py
 python scripts/evaluate_enforcement.py
 python scripts/evaluate_audit.py
+python scripts/evaluate_workflow.py
 ```

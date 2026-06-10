@@ -2,10 +2,16 @@
 
 from src.orchestration.analysis import AnalysisWorkflow
 from src.orchestration.audited_review import AuditedReviewWorkflow
+from src.orchestration.durable import (
+    DurableOrchestrator,
+    InvalidWorkflowTransitionError,
+)
 from src.orchestration.launch_review import LaunchReviewWorkflow
 
 __all__ = [
     "AnalysisWorkflow",
     "AuditedReviewWorkflow",
+    "DurableOrchestrator",
+    "InvalidWorkflowTransitionError",
     "LaunchReviewWorkflow",
 ]

@@ -110,3 +110,25 @@ flowchart LR
 The Audit Agent validates lineage and independently replays enforcement. The
 resulting content hash makes later changes detectable, while durable
 immutability remains the responsibility of a future storage layer.
+
+## Durable Orchestration
+
+```mermaid
+flowchart LR
+    A["Submit Case"] --> B["SQLite Workflow State"]
+    B --> C["Analysis Checkpoint"]
+    C --> D["Enforcement Checkpoint"]
+    D --> E["Audit Checkpoint"]
+    E --> F{"Human Review?"}
+    F -->|No| G["Completed"]
+    F -->|Yes| H["Awaiting Approval"]
+    H --> I["Approve / Reject / Override"]
+    C -. failure .-> J["Failed / Resume"]
+    D -. failure .-> J
+    E -. failure .-> J
+    J --> B
+```
+
+Every transition updates the materialized run state and appends a hash-chained
+event. Optimistic version checks prevent stale workers or reviewers from
+overwriting newer state.

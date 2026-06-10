@@ -1,8 +1,11 @@
-from fastapi import FastAPI
+import os
+
+from fastapi import FastAPI, HTTPException
 
 from src.audit import verify_decision_record
 from src.knowledge import PolicyRetriever
 from src.models import (
+    ApprovalRequest,
     AuditedLaunchReview,
     AuditRequest,
     CaseAnalysisRequest,
@@ -13,11 +16,21 @@ from src.models import (
     EnforcementRequest,
     LaunchReviewResponse,
     ParallelAnalysisResponse,
+    StartWorkflowRequest,
+    WorkflowEvent,
+    WorkflowRun,
 )
 from src.orchestration import (
     AnalysisWorkflow,
     AuditedReviewWorkflow,
+    DurableOrchestrator,
+    InvalidWorkflowTransitionError,
     LaunchReviewWorkflow,
+)
+from src.workflow import (
+    SQLiteWorkflowRepository,
+    WorkflowConflictError,
+    WorkflowNotFoundError,
 )
 
 app = FastAPI(
@@ -30,6 +43,13 @@ analysis_workflow = AnalysisWorkflow(retriever=retriever)
 launch_review_workflow = LaunchReviewWorkflow(analysis_workflow=analysis_workflow)
 audited_review_workflow = AuditedReviewWorkflow(
     launch_review_workflow=launch_review_workflow
+)
+workflow_repository = SQLiteWorkflowRepository(
+    os.getenv("WORKFLOW_DB_PATH", ".data/workflows.db")
+)
+durable_orchestrator = DurableOrchestrator(
+    repository=workflow_repository,
+    analysis_workflow=analysis_workflow,
 )
 
 
@@ -104,3 +124,57 @@ def verify_audit_record(record: DecisionRecord) -> dict[str, object]:
         "valid": verify_decision_record(record),
         "hash_algorithm": record.hash_algorithm,
     }
+
+
+@app.post("/v1/workflows", response_model=WorkflowRun)
+def start_workflow(request: StartWorkflowRequest) -> WorkflowRun:
+    try:
+        return durable_orchestrator.start(
+            request.case,
+            idempotency_key=request.idempotency_key,
+            top_k=request.top_k,
+        )
+    except WorkflowConflictError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from error
+
+
+@app.get("/v1/workflows/{run_id}", response_model=WorkflowRun)
+def get_workflow(run_id: str) -> WorkflowRun:
+    try:
+        return workflow_repository.get(run_id)
+    except WorkflowNotFoundError as error:
+        raise HTTPException(status_code=404, detail="workflow not found") from error
+
+
+@app.get("/v1/workflows/{run_id}/events")
+def get_workflow_events(run_id: str) -> dict[str, object]:
+    try:
+        events: list[WorkflowEvent] = workflow_repository.list_events(run_id)
+        valid = workflow_repository.verify_event_chain(run_id)
+    except WorkflowNotFoundError as error:
+        raise HTTPException(status_code=404, detail="workflow not found") from error
+    return {
+        "run_id": run_id,
+        "chain_valid": valid,
+        "events": events,
+    }
+
+
+@app.post("/v1/workflows/{run_id}/resume", response_model=WorkflowRun)
+def resume_workflow(run_id: str) -> WorkflowRun:
+    try:
+        return durable_orchestrator.resume(run_id)
+    except WorkflowNotFoundError as error:
+        raise HTTPException(status_code=404, detail="workflow not found") from error
+    except InvalidWorkflowTransitionError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from error
+
+
+@app.post("/v1/workflows/{run_id}/decision", response_model=WorkflowRun)
+def decide_workflow(run_id: str, request: ApprovalRequest) -> WorkflowRun:
+    try:
+        return durable_orchestrator.decide(run_id, request)
+    except WorkflowNotFoundError as error:
+        raise HTTPException(status_code=404, detail="workflow not found") from error
+    except (InvalidWorkflowTransitionError, WorkflowConflictError) as error:
+        raise HTTPException(status_code=409, detail=str(error)) from error
