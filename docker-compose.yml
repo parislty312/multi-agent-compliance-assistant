@@ -1,0 +1,15 @@
+services:
+  compliance-assistant:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: production
+      COMPLIANCE_API_KEY: ${COMPLIANCE_API_KEY:?set COMPLIANCE_API_KEY}
+      LOG_LEVEL: INFO
+    volumes:
+      - compliance-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  compliance-data:

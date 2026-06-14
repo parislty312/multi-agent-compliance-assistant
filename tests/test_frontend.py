@@ -32,6 +32,7 @@ def test_demo_cases_are_available_to_console() -> None:
 
     assert response.status_code == 200
     body = response.json()
+    assert body["docs_enabled"] is True
     assert len(body["cases"]) == 15
     assert body["cases"][8]["case"]["case_id"] == "CASE-009"
     assert body["cases"][8]["expected"]["outcome"] == "escalate"
@@ -46,3 +47,12 @@ def test_frontend_uses_semantic_landmarks_and_accessible_labels() -> None:
     assert 'aria-live="polite"' in html
     assert 'class="skip-link"' in html
     assert 'label for="case-template"' in html
+    assert 'for="access-key"' in html
+
+
+def test_frontend_sends_access_key_from_session_storage() -> None:
+    script = (ROOT / "frontend" / "app.js").read_text(encoding="utf-8")
+
+    assert 'sessionStorage.getItem("complianceApiKey")' in script
+    assert '"X-API-Key": state.apiKey' in script
+    assert 'addEventListener("input"' in script

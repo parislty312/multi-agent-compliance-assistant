@@ -60,6 +60,14 @@ class SQLiteWorkflowRepository:
                 """
             )
 
+    def healthcheck(self) -> bool:
+        try:
+            with self._connect() as connection:
+                row = connection.execute("SELECT 1 AS healthy").fetchone()
+            return bool(row and row["healthy"] == 1)
+        except sqlite3.Error:
+            return False
+
     def create(self, run: WorkflowRun) -> WorkflowRun:
         state_json = run.model_dump_json()
         try:

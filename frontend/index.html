@@ -22,7 +22,20 @@
       </div>
       <div class="topbar-meta">
         <span class="environment-pill">Synthetic policy environment</span>
-        <a href="/docs" target="_blank" rel="noreferrer">API docs</a>
+        <label class="access-key-field" for="access-key">
+          <span>Access key</span>
+          <input
+            id="access-key"
+            type="password"
+            autocomplete="off"
+            placeholder="Development: optional"
+            aria-describedby="access-key-help"
+          >
+        </label>
+        <span id="access-key-help" class="visually-hidden">
+          Stored only in this browser tab and sent as an API request header.
+        </span>
+        <a id="api-docs-link" href="/docs" target="_blank" rel="noreferrer">API docs</a>
       </div>
     </header>
 

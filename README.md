@@ -96,8 +96,18 @@ Week 7 review-console foundations are implemented:
 - Visible record hash and event-chain integrity status
 - Same-origin FastAPI delivery with no frontend build step
 
+Week 8 production-readiness foundations are implemented:
+
+- Environment-aware runtime configuration with production validation
+- Optional development and mandatory production API-key protection
+- Request IDs, structured access logs, security headers, and body-size limits
+- Liveness, dependency readiness, and Prometheus metrics endpoints
+- Non-root Docker image with persistent workflow storage
+- GitHub Actions for linting, tests, benchmarks, and container builds
+- Operations runbook and deployment checklist
+
 See [Week 1 scope](docs/week-1-scope.md) and
-[Week 7 Review Console](docs/week-7-review-console.md).
+[Week 8 Production Readiness](docs/week-8-production-readiness.md).
 
 ## Safety
 
@@ -134,6 +144,31 @@ Audit a launch with `POST /v1/audit/run`.
 Verify a decision record with `POST /v1/audit/verify`.
 Start a durable workflow with `POST /v1/workflows`.
 
+Production mode requires an API key:
+
+```bash
+export APP_ENV=production
+export COMPLIANCE_API_KEY="replace-with-a-secret"
+uvicorn src.main:app --host 0.0.0.0 --port 8000
+```
+
+Protected endpoints accept either `X-API-Key` or `Authorization: Bearer`.
+The Review Console stores its access key only in the active browser tab.
+
+Run with Docker Compose:
+
+```bash
+COMPLIANCE_API_KEY="replace-with-a-secret" docker compose up --build
+```
+
+Operational endpoints:
+
+```text
+GET /health/live     Process liveness
+GET /health/ready    Database and policy-index readiness
+GET /metrics         Prometheus metrics; protected when an API key is configured
+```
+
 Run the deterministic retrieval benchmark:
 
 ```bash
@@ -143,3 +178,6 @@ python scripts/evaluate_enforcement.py
 python scripts/evaluate_audit.py
 python scripts/evaluate_workflow.py
 ```
+
+See the [Operations Runbook](docs/operations-runbook.md) for deployment,
+monitoring, backup, and incident-response procedures.

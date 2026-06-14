@@ -1,12 +1,17 @@
-import os
+import hmac
 import json
+import logging
+import re
+import time
 from pathlib import Path
+from uuid import uuid4
 
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
 from src.audit import verify_decision_record
+from src.config import Settings
 from src.knowledge import PolicyRetriever
 from src.models import (
     ApprovalRequest,
@@ -31,17 +36,29 @@ from src.orchestration import (
     InvalidWorkflowTransitionError,
     LaunchReviewWorkflow,
 )
+from src.operations import RuntimeMetrics, log_access
 from src.workflow import (
     SQLiteWorkflowRepository,
     WorkflowConflictError,
     WorkflowNotFoundError,
 )
 
+settings = Settings.from_env()
+logging.basicConfig(
+    level=getattr(logging, settings.log_level, logging.INFO),
+    format="%(message)s",
+)
+access_logger = logging.getLogger("compliance.access")
 app = FastAPI(
     title="Multi-Agent Compliance Assistant",
     description="Auditable compliance decision support for AI product launches.",
-    version="0.1.0",
+    version="0.2.0",
+    docs_url="/docs" if settings.docs_enabled else None,
+    redoc_url="/redoc" if settings.docs_enabled else None,
+    openapi_url="/openapi.json" if settings.docs_enabled else None,
 )
+app.state.settings = settings
+app.state.metrics = RuntimeMetrics()
 retriever = PolicyRetriever()
 analysis_workflow = AnalysisWorkflow(retriever=retriever)
 launch_review_workflow = LaunchReviewWorkflow(analysis_workflow=analysis_workflow)
@@ -49,7 +66,7 @@ audited_review_workflow = AuditedReviewWorkflow(
     launch_review_workflow=launch_review_workflow
 )
 workflow_repository = SQLiteWorkflowRepository(
-    os.getenv("WORKFLOW_DB_PATH", ".data/workflows.db")
+    settings.workflow_db_path
 )
 durable_orchestrator = DurableOrchestrator(
     repository=workflow_repository,
@@ -59,6 +76,140 @@ project_root = Path(__file__).parents[1]
 frontend_dir = project_root / "frontend"
 benchmark_path = project_root / "benchmarks" / "cases" / "week_1_cases.json"
 app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
+request_id_pattern = re.compile(r"^[A-Za-z0-9._:-]{1,128}$")
+
+
+@app.middleware("http")
+async def operational_controls(request: Request, call_next):
+    started = time.perf_counter()
+    configured: Settings = request.app.state.settings
+    supplied_request_id = request.headers.get("X-Request-ID", "")
+    request_id = (
+        supplied_request_id
+        if request_id_pattern.fullmatch(supplied_request_id)
+        else uuid4().hex
+    )
+    status_code = 500
+
+    content_length = request.headers.get("content-length")
+    request_too_large = (
+        content_length is not None
+        and content_length.isdigit()
+        and int(content_length) > configured.max_request_bytes
+    )
+    try:
+        if request_too_large:
+            response = JSONResponse(
+                status_code=413,
+                content={"detail": "request body exceeds configured size limit"},
+            )
+            status_code = response.status_code
+        elif _requires_api_key(request.url.path) and configured.api_key:
+            supplied_key = _extract_api_key(request)
+            if not supplied_key or not hmac.compare_digest(
+                supplied_key,
+                configured.api_key,
+            ):
+                response = JSONResponse(
+                    status_code=401,
+                    content={"detail": "valid API key required"},
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+                status_code = response.status_code
+            else:
+                response = await call_next(request)
+                status_code = response.status_code
+        else:
+            response = await call_next(request)
+            status_code = response.status_code
+    except Exception:
+        access_logger.exception(
+            json.dumps(
+                {
+                    "event": "unhandled_request_error",
+                    "request_id": request_id,
+                    "method": request.method,
+                    "path": request.url.path,
+                },
+                sort_keys=True,
+            )
+        )
+        response = JSONResponse(
+            status_code=500,
+            content={
+                "detail": "internal server error",
+                "request_id": request_id,
+            },
+        )
+        status_code = response.status_code
+
+    duration = time.perf_counter() - started
+    route = request.scope.get("route")
+    route_path = getattr(route, "path", request.url.path)
+    request.app.state.metrics.record(
+        method=request.method,
+        route=route_path,
+        status_code=status_code,
+        duration_seconds=duration,
+    )
+    log_access(
+        access_logger,
+        request_id=request_id,
+        method=request.method,
+        path=request.url.path,
+        status_code=status_code,
+        duration_ms=duration * 1000,
+    )
+    response.headers["X-Request-ID"] = request_id
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["Cache-Control"] = (
+        "no-store" if request.url.path.startswith("/v1/") else "no-cache"
+    )
+    response.headers["Content-Security-Policy"] = _content_security_policy(
+        request.url.path
+    )
+    return response
+
+
+def _requires_api_key(path: str) -> bool:
+    return (
+        (path.startswith("/v1/") and path != "/v1/demo/cases")
+        or path == "/metrics"
+    )
+
+
+def _extract_api_key(request: Request) -> str | None:
+    direct = request.headers.get("X-API-Key")
+    if direct:
+        return direct
+    authorization = request.headers.get("Authorization", "")
+    scheme, _, credential = authorization.partition(" ")
+    if scheme.lower() == "bearer" and credential:
+        return credential
+    return None
+
+
+def _content_security_policy(path: str) -> str:
+    if path in {"/docs", "/redoc"}:
+        return (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net "
+            "https://fonts.googleapis.com; "
+            "font-src 'self' https://fonts.gstatic.com; "
+            "img-src 'self' data: https://fastapi.tiangolo.com; "
+            "frame-ancestors 'none'"
+        )
+    return (
+        "default-src 'self'; "
+        "script-src 'self'; "
+        "style-src 'self'; "
+        "img-src 'self' data:; "
+        "connect-src 'self'; "
+        "frame-ancestors 'none'"
+    )
 
 
 @app.get("/", include_in_schema=False)
@@ -69,6 +220,32 @@ def review_console() -> FileResponse:
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/health/live")
+def liveness() -> dict[str, str]:
+    return {"status": "ok"}
+
+
+@app.get("/health/ready")
+def readiness() -> JSONResponse:
+    checks = {
+        "workflow_database": workflow_repository.healthcheck(),
+        "policy_index": bool(retriever.documents),
+    }
+    ready = all(checks.values())
+    return JSONResponse(
+        status_code=200 if ready else 503,
+        content={
+            "status": "ready" if ready else "not_ready",
+            "checks": checks,
+        },
+    )
+
+
+@app.get("/metrics", response_class=PlainTextResponse)
+def metrics(request: Request) -> str:
+    return request.app.state.metrics.render_prometheus()
 
 
 @app.post("/v1/cases/validate", response_model=CaseIntake)
@@ -103,9 +280,10 @@ def list_policies() -> dict[str, object]:
 
 
 @app.get("/v1/demo/cases")
-def list_demo_cases() -> dict[str, object]:
+def list_demo_cases(request: Request) -> dict[str, object]:
     benchmarks = json.loads(benchmark_path.read_text(encoding="utf-8"))
     return {
+        "docs_enabled": request.app.state.settings.docs_enabled,
         "cases": [
             {
                 "case": item["case"],

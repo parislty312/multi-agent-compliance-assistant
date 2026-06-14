@@ -3,6 +3,7 @@ const state = {
   currentTemplate: null,
   run: null,
   events: [],
+  apiKey: window.sessionStorage.getItem("complianceApiKey") || "",
 };
 
 const byId = (id) => document.getElementById(id);
@@ -44,8 +45,13 @@ function showToast(message) {
 }
 
 async function api(path, options = {}) {
+  const accessHeaders = state.apiKey ? { "X-API-Key": state.apiKey } : {};
   const response = await fetch(path, {
-    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+    headers: {
+      "Content-Type": "application/json",
+      ...accessHeaders,
+      ...(options.headers || {}),
+    },
     ...options,
   });
   const body = await response.json().catch(() => ({}));
@@ -60,6 +66,7 @@ async function api(path, options = {}) {
 
 async function loadTemplates() {
   const payload = await api("/v1/demo/cases");
+  byId("api-docs-link").hidden = !payload.docs_enabled;
   state.templates = payload.cases;
   const select = byId("case-template");
   select.innerHTML = state.templates
@@ -324,6 +331,22 @@ async function submitDecision(action) {
 
 byId("case-template").addEventListener("change", (event) => {
   selectTemplate(event.target.value);
+});
+byId("access-key").value = state.apiKey;
+byId("access-key").addEventListener("input", (event) => {
+  state.apiKey = event.target.value.trim();
+  if (state.apiKey) {
+    window.sessionStorage.setItem("complianceApiKey", state.apiKey);
+  } else {
+    window.sessionStorage.removeItem("complianceApiKey");
+  }
+});
+byId("access-key").addEventListener("change", () => {
+  if (state.apiKey) {
+    showToast("Access key stored for this browser tab.");
+  } else {
+    showToast("Access key cleared.");
+  }
 });
 byId("format-json").addEventListener("click", () => {
   try {

@@ -151,3 +151,30 @@ The browser console is a thin same-origin client over the durable API. It does
 not duplicate policy or decision logic. The UI renders the stored evidence,
 agent outputs, enforcement result, audit checks, record hash, and event chain,
 then sends human decisions back through the versioned workflow endpoint.
+
+## Production Operations
+
+```mermaid
+flowchart LR
+    A["Client / Review Console"] --> B["Request Controls"]
+    B --> C["API Key Authentication"]
+    C --> D["Compliance API"]
+    D --> E["Workflow Database"]
+    D --> F["Policy and Rule Assets"]
+    B --> G["Request Metrics"]
+    B --> H["Structured Access Logs"]
+    I["Container Orchestrator"] --> J["Live Probe"]
+    I --> K["Ready Probe"]
+    K --> E
+    K --> F
+```
+
+The operations layer is deliberately separate from Agent reasoning and
+deterministic enforcement. It applies request-size limits, API-key validation,
+request IDs, browser security headers, structured logs, and low-cardinality
+metrics before or after application handling.
+
+Development mode remains open by default for local exploration. Production
+mode fails fast unless `COMPLIANCE_API_KEY` is configured. The liveness probe
+checks the process, while readiness verifies both SQLite access and policy
+index availability.
